@@ -11,6 +11,9 @@ RUN apt-get update && \
 ## Install rosinstall and other dependencies
 RUN apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 
+## Setup environment variables
+RUN echo "source /opt/ros/melodic/setup.bash" >> /.bashrc
+
 # Instalacion MAVROS https://dev.px4.io/en/ros/mavros_installation.html
     ## Instalar dependencias
 RUN apt-get install python-catkin-tools python-rosinstall-generator -y && \
@@ -25,11 +28,13 @@ RUN apt-get install python-catkin-tools python-rosinstall-generator -y && \
     ## Build MAVROS - Install deps
     rosdep install --from-paths src --ignore-src -y && \
     ## Install geographiclib
-    /home/catkin_ws/src/mavros/mavros/scripts/install_geographiclib_datasets.sh 
-    ## Build!
-    #catkin build
+    /home/catkin_ws/src/mavros/mavros/scripts/install_geographiclib_datasets.sh
 # Fin MAVROS
 
-## Setup environment variables
-RUN echo "source /opt/ros/melodic/setup.bash" >> /.bashrc  && \
-    echo "source /home/catkin_ws/devel/setup.bash" >> /.bashrc
+## Build Catkin
+RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd /home/catkin_ws; catkin build'
+## Setup environment variables 
+RUN echo "source /home/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+
+
