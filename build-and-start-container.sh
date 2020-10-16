@@ -27,6 +27,8 @@ if [[ $( $list_containers | grep -w $CONTAINER_NAME ) ]]; then
     docker rm --force $CONTAINER_NAME
 fi
 
+xhost +local:docker #Permite GUIs en docker
+
 echo "Procediendo a construir y ejecutar el contenedor"
 echo "Para cerrar el contenedor y eliminarlo presionar CTRL+D"
 docker  run -it --rm \
