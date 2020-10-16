@@ -1,6 +1,7 @@
 #!/bin/bash
 IMAGE_NAME="drone-gazebo-docker:latest" # nombre y tag con el que se creara la imagen
 CONTAINER_NAME="drone-test"             # nombre con el que se creara el contenedor
+FIRMWARE_DIRECTORY="Firmware"
 
 list_images="docker images --format={{.Repository}}:{{.Tag}}"
 list_containers="docker ps --format '{{.Names}}' -a"
@@ -12,6 +13,12 @@ else
     echo "No existe la imagen $IMAGE_NAME, se procede a buildear."
     echo "Running -> docker build -t $IMAGE_NAME -f Dockerfile ."
     docker build -t $IMAGE_NAME -f Dockerfile .
+fi
+
+echo "Corroborando si existe el directorio de firmware de PX4"
+if [ ! -d "$FIRMWARE_DIRECTORY" ]; then
+  echo "Clonando repositorio.."
+  git clone https://github.com/PX4/Firmware.git 
 fi
 
 echo "Corroborando si existe un contenedor con el mismo nombre"
