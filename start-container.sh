@@ -15,7 +15,7 @@ if [[ "$#" -ne 1 ]]; then
 fi
 
 echo "Corroborando si existe un contenedor con el mismo nombre"
-if [[ $( $list_containers | grep -w $CONTAINER_NAME ) ]]; then
+if ( echo "$list_containers" | fgrep -q $CONTAINER_NAME ); then
     echo " -> Existe un contenedor con el mismo nombre, se procede a eliminarlo"
     docker rm --force $CONTAINER_NAME
 else
